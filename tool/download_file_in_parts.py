@@ -1,5 +1,6 @@
 import requests
 import threading
+import os
 
 from .download_part import download_part
 
@@ -7,7 +8,9 @@ from .download_part import download_part
 
 def download_file_in_parts(url : str,
                            num_parts : int,
-                           filename : str):
+                           filename : str,
+                           status_callback = None):
+    
     response = requests.head(url)
     total_size = int(response.headers.get('content-length', 0))
     part_size = total_size // num_parts
@@ -24,7 +27,7 @@ def download_file_in_parts(url : str,
     
         theard = threading.Thread(
             target=download_part,
-            args=(url, start_byte, end_byte, filename, i)
+            args=(url, start_byte, end_byte, filename, i, status_callback)
         )
         theards.append(theard)
         theard.start()
@@ -33,5 +36,6 @@ def download_file_in_parts(url : str,
     
     for _thread in theards:
         _thread.join()
+    
     
                 
