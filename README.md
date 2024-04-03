@@ -1,5 +1,3 @@
-# Readme
-
 ## Download Manager
 
 This is a simple Python script that allows you to download a file from a URL in multiple parts concurrently, merge them, and save the complete file locally. This can be useful when downloading large files, as it allows for faster downloads by utilizing multiple connections.
