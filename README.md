@@ -59,6 +59,27 @@ This repository contains a Python script that monitors GPU usage and logs the da
 3. **Access the Log File**:
    The GPU usage data will be logged in a file named `result.csv` in the same directory as the script.
 
+
+## report server
+1. **Clone the Repository**:
+   ```bash
+   git clone https://github.com/parvvaresh/Monitor-GPU-usage
+   cd Monitor-GPU-usage
+   ```
+
+2. **Use class**:
+   ```python
+   from report_server.report_server import report_server
+   rs = report_server(df) # data frame who save it in your server
+   rs.get_report_plot()
+   rs.get_text_report()
+   ```
+
+   ```bash
+   python3 gpu_usage.py
+   ```
+
+
 ## Contributing
 
 Contributions are welcome. Please fork the repository and submit a pull request for review.
