@@ -11,6 +11,8 @@ This repository contains a Python script that monitors GPU usage and logs the da
 │   ├── run_commands.py
 │   ├── run_in_screen.py
 │   ├── write_sh_file.py
+├── report_server
+    ├── report_server.py
 ├── gpu_usage.py
 └── README.md
 ```
