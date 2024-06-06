@@ -75,9 +75,7 @@ This repository contains a Python script that monitors GPU usage and logs the da
    rs.get_text_report()
    ```
 
-   ```bash
-   python3 gpu_usage.py
-   ```
+
 
 
 ## Contributing
