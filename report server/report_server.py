@@ -42,21 +42,21 @@ class report_server_weakly:
 
 
   def get_report_plot(self) -> None:
-    self._get_all_7days_in_one_plot(self.df, "utilization.gpu [%]" , list(range(1, 25)))
-    self._get_all_7days_in_one_plot(self.df, "utilization.memory [%]" , list(range(1, 25)))
+    self._get_all_7days_in_one_plot(self.df, "utilization.gpu [%]" , list(range(0, 25)), "24")
+    self._get_all_7days_in_one_plot(self.df, "utilization.memory [%]" , list(range(0, 25)), "24")
 
 
-    self.hours_peak_usage(self.df, "utilization.gpu [%]")
-    self.hours_peak_usage(self.df, "utilization.memory [%]")
+    self.hours_peak_usage(self.df, "utilization.gpu [%]", list(range(1, 25)))
+    self.hours_peak_usage(self.df, "utilization.memory [%]", list(range(1, 25)))
 
 
 
-    self._get_all_7days_in_one_plot(self.df_filtered, "utilization.gpu [%]" , list(range(7, 16)))
-    self._get_all_7days_in_one_plot(self.df_filtered, "utilization.memory [%]" , list(range(7, 16)))
+    self._get_all_7days_in_one_plot(self.df_filtered, "utilization.gpu [%]" , list(range(7, 16)), "office")
+    self._get_all_7days_in_one_plot(self.df_filtered, "utilization.memory [%]" , list(range(7, 16)), "office")
 
 
-    self.hours_peak_usage(self.df_filtered, "utilization.gpu [%]")
-    self.hours_peak_usage(self.df_filtered, "utilization.memory [%]")
+    self.hours_peak_usage(self.df_filtered, "utilization.gpu [%]", list(range(7, 16)))
+    self.hours_peak_usage(self.df_filtered, "utilization.memory [%]", list(range(7, 16)))
 
 
 
@@ -125,35 +125,43 @@ class report_server_weakly:
 
 
   def _get_all_7days_in_one_plot(self,
-                                 df : pd.DataFrame,
-                                 column : str,
-                                 hourse):
+                                 df: pd.DataFrame,
+                                 column: str,
+                                 hourse : list,
+                                 title : str):
     df_date = df.groupby(by="date-daily")
     plt.figure(figsize=(20, 12))
     dates = []
 
-    houres_fix = list(map(lambda x : str(x), hourse))
+    houres_fix = list(map(lambda x: str(x), hourse))
 
     for date, group in df_date:
       dates.append(date)
       group["hourly"] = group["timestamp"].apply(lambda time: time.hour)
-      df_hours = group.groupby(by="hourly")[column].mean()
-      plt.plot(houres_fix , list(df_hours), label=str(date))
 
+      # Create a series for the 24 hours to ensure all hours are present
+      all_hours = pd.Series(index=hourse, dtype=float)
+      df_hours = group.groupby(by="hourly")[column].mean()
+
+      # Reindex to ensure all hours are included
+      df_hours = df_hours.reindex(all_hours.index, fill_value=np.nan)
+
+      plt.plot(houres_fix, list(df_hours), label=str(date))
 
     plt.title(f'The amount of {column} usage at different hours (whole day) based on seven days of the week {self.name}')
-    plt.xlabel('24 hours a day')
+    plt.xlabel(f'{title} hours a day')
     plt.ylabel('Usage percentage')
 
     plt.legend()
-
     plt.show()
+
 
 
 
   def hours_peak_usage(self,
                        df : pd.DataFrame,
-                       column : str) -> None:
+                       column : str,
+                       hourse : list) -> None:
 
     df["hourly"] = df["timestamp"].apply(lambda time: time.hour)
 
@@ -173,7 +181,7 @@ class report_server_weakly:
     plt.title(f'Average {column} Usage by Hour for One Week')
     plt.xlabel('Hour of the Day')
     plt.ylabel('Average Utilization (%)')
-    plt.xticks(range(24))  # Ensure x-axis has labels for all 24 hours
+    plt.xticks(hourse)
     plt.legend()
     plt.grid(True)
     plt.show()
@@ -211,3 +219,4 @@ class report_server_weakly:
       print(top_border)
       print(middle)
       print(bottom_border)
+
