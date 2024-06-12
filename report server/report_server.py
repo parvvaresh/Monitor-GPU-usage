@@ -2,7 +2,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import seaborn as sns
 from datetime import datetime, time
-
+import numpy as np
 
 class report_server_weakly:
 
