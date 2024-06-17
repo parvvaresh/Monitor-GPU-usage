@@ -7,10 +7,7 @@ This repository contains a Python script that monitors GPU usage and logs the da
 ```
 .
 ├── _gpu_usage
-│   ├── install_screen.py
-│   ├── run_commands.py
-│   ├── run_in_screen.py
-│   ├── write_sh_file.py
+│   ├── usgae_gpu.sh
 ├── report_server
     ├── report_server.py
 ├── gpu_usage.py
@@ -25,6 +22,8 @@ This repository contains a Python script that monitors GPU usage and logs the da
 - **_gpu_usage/write_sh_file.py**: Creates a shell script that logs GPU usage data.
 - **gpu_usage.py**: Main script that coordinates the process.
 
+
+**will be update**
 ## Prerequisites
 
 - Python 3.x
