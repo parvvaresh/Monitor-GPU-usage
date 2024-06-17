@@ -2,15 +2,20 @@
 #!/bin/bash
 
 
-LOGFILE="/home/reza/Desktop/git hub/Monitor-GPU-usage/_gpu_usage/result.csv"
+
+echo please enter a path file for saved csv file :
+read LOGFILE
+
 
 
 if [ ! -f "$LOGFILE" ]; then    echo "timestamp,name,utilization.gpu [%],utilization.memory [%]" >> "$LOGFILE"
 fi
 
 
+echo please enter secend for saved  (s) :
+read time
+
 while true; do
     nvidia-smi --query-gpu=timestamp,name,utilization.gpu,utilization.memory --format=csv,noheader,nounits >> "$LOGFILE"
-    sleep 12
+    sleep time
 done
-    
