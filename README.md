@@ -1,86 +1,99 @@
-# GPU Usage Monitor
+Here is the **README** file for your script:
 
-This repository contains a Python script that monitors GPU usage and logs the data into a CSV file at regular intervals. The script leverages `nvidia-smi` to query GPU statistics and runs in the background using the `screen` utility.
+---
 
-## Project Structure
+# GPU and CPU Utilization Logger
 
-```
-.
-├── _gpu_usage
-│   ├── usgae_gpu.sh
-├── report_server
-    ├── report_server.py
-├── gpu_usage.py
-└── README.md
-```
+This Bash script logs GPU and CPU utilization data into a CSV file at user-specified intervals. It uses NVIDIA's `nvidia-smi` command to gather GPU data and `mpstat` for CPU utilization. This script is useful for monitoring system performance over time.
 
-### Files and Their Functions
+---
 
-- **_gpu_usage/install_screen.py**: Installs the `screen` utility.
-- **_gpu_usage/run_commands.py**: Executes necessary commands to set up and run the monitoring script.
-- **_gpu_usage/run_in_screen.py**: Runs the monitoring script in a detached `screen` session.
-- **_gpu_usage/write_sh_file.py**: Creates a shell script that logs GPU usage data.
-- **gpu_usage.py**: Main script that coordinates the process.
+## Features
+- Logs timestamp, GPU name, GPU utilization, memory utilization, and CPU utilization.
+- Allows users to specify the file path for saving the logs.
+- Lets users set the interval for collecting and saving the data.
+- Outputs data in CSV format, compatible with tools like Excel and Python.
 
+---
 
-**will be update**
 ## Prerequisites
+1. **NVIDIA GPU**:
+   - Ensure you have an NVIDIA GPU with the `nvidia-smi` tool installed (typically included with NVIDIA drivers).
 
-- Python 3.x
-- NVIDIA GPU with `nvidia-smi` installed
-- `screen` utility (the script will install it if not present)
+2. **mpstat**:
+   - Install the `sysstat` package for CPU monitoring.
+   - On Ubuntu/Debian:
+     ```bash
+     sudo apt-get install sysstat
+     ```
+   - On CentOS/RHEL:
+     ```bash
+     sudo yum install sysstat
+     ```
 
-## Installation
-
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/parvvaresh/Monitor-GPU-usage
-   cd Monitor-GPU-usage
-   ```
-
-2. **Run the Script**:
-   ```bash
-   python3 gpu_usage.py
-   ```
-   The script will prompt you to enter the interval (in seconds) at which you want to log the GPU usage data.
+---
 
 ## Usage
 
-1. **Enter the Logging Interval**:
-   When prompted, specify how frequently you want to save the GPU usage data (in seconds).
+### Step 1: Make the script executable
+```bash
+chmod +x logger.sh
+```
 
-2. **Background Logging**:
-   The script will:
-   - Make the logging shell script executable.
-   - Install `screen` if it is not already installed.
-   - Run the logging shell script in a detached `screen` session named `usage_gpu`.
+### Step 2: Run the script
+```bash
+./logger.sh
+```
 
-3. **Access the Log File**:
-   The GPU usage data will be logged in a file named `result.csv` in the same directory as the script.
+### Step 3: Provide the required inputs
+- **CSV File Path**: Specify the file where the logs will be saved. If the file does not exist, it will be created with appropriate headers.
+- **Sampling Interval**: Enter the interval in seconds between data collection cycles.
 
+---
 
-## report server
-1. **Clone the Repository**:
-   ```bash
-   git clone https://github.com/parvvaresh/Monitor-GPU-usage
-   cd Monitor-GPU-usage
-   ```
+## Example
+If you provide:
+- File path: `/home/user/logs/utilization.csv`
+- Sampling interval: `5` seconds
 
-2. **Use class**:
-   ```python
-   from report_server.report_server import report_server
-   rs = report_server(df) # data frame who save it in your server
-   rs.get_report_plot()
-   rs.get_text_report()
-   ```
+The script will append rows to `/home/user/logs/utilization.csv` every 5 seconds, with entries like:
+```csv
+timestamp,name,utilization.gpu [%],utilization.memory [%],cpu.utilization [%]
+2024-12-21 10:15:30,NVIDIA GeForce RTX 3080,85,70,20
+2024-12-21 10:15:35,NVIDIA GeForce RTX 3080,80,65,25
+```
 
+---
 
+## Notes
+- **Stop the Script**: To stop the script, press `Ctrl+C`.
+- **Performance Impact**: The script runs lightweight monitoring commands (`nvidia-smi` and `mpstat`). However, frequent sampling intervals (e.g., 1 second) may cause a slight system overhead.
+- **File Size**: Over time, the log file can grow large. Consider periodically archiving or clearing it if needed.
 
+---
 
-## Contributing
+## Troubleshooting
 
-Contributions are welcome. Please fork the repository and submit a pull request for review.
+1. **Command not found: `nvidia-smi`**:
+   - Ensure that you have an NVIDIA GPU and the drivers are properly installed.
+
+2. **Command not found: `mpstat`**:
+   - Install the `sysstat` package using the instructions above.
+
+3. **Permission Denied**:
+   - Ensure the script has execute permissions:
+     ```bash
+     chmod +x logger.sh
+     ```
+
+4. **Incorrect Interval Input**:
+   - The `sleep` command requires a numeric interval. Ensure that you enter a valid number.
+
+---
 
 ## License
+This script is provided "as is" without any warranties. Feel free to modify and use it as needed.
 
-This project is licensed under the MIT License. See the `LICENSE` file for details.
+---
+
+Let me know if you need additional details or adjustments!
